@@ -104,147 +104,206 @@ export default function AddContentPage() {
     };
 
     return (
-        <div className="add-content-page">
+    <div className="add-content-page">
         <form onSubmit={handleSubmit} className="add-content-form">
-            <h2>Ajouter un contenu</h2>
+            <h2 className="title">Ajouter un contenu</h2>
 
-            <select
-            value={type}
-            onChange={(e) => handleTypeChange(e.target.value as ContentType)}
-            className="input-field"
-            >
-            <option value="films">Film</option>
-            <option value="series">Série</option>
-            <option value="episodes">Épisode</option>
-            </select>
+            <div className="form-group">
+                <label>Type de contenu</label>
+                <select
+                    value={type}
+                    onChange={(e) => handleTypeChange(e.target.value as ContentType)}
+                    className="input-field"
+                >
+                    <option value="films">Film</option>
+                    <option value="series">Série</option>
+                    <option value="episodes">Épisode</option>
+                </select>
+            </div>
 
             {(type === "films" || type === "series") && (
-            <>
-                <input
-                type="text"
-                placeholder="Titre"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="input-field"
-                />
-                <input
-                type="text"
-                placeholder="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="input-field"
-                />
-                <input
-                type="text"
-                placeholder="Réalisateur"
-                value={director}
-                onChange={(e) => setDirector(e.target.value)}
-                className="input-field"
-                />
-                <input
-                type="text"
-                placeholder="URL Image"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                className="input-field"
-                />
-            </>
+                <>
+                    <div className="form-group">
+                        <label>Titre</label>
+                        <input
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            className="input-field"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Description</label>
+                        <input
+                            type="text"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            className="input-field"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Réalisateur</label>
+                        <input
+                            type="text"
+                            value={director}
+                            onChange={(e) => setDirector(e.target.value)}
+                            className="input-field"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>URL Image</label>
+                        <input
+                            type="text"
+                            value={image}
+                            onChange={(e) => setImage(e.target.value)}
+                            className="input-field"
+                        />
+                    </div>
+                </>
             )}
 
             {type === "series" && (
-            <input
-                type="number"
-                placeholder="Saison"
-                value={season}
-                onChange={(e) => setSeason(Number(e.target.value))}
-                className="input-field"
-            />
+                <div className="form-group">
+                    <label>Saison</label>
+                    <input
+                        type="number"
+                        value={season}
+                        onChange={(e) => setSeason(Number(e.target.value))}
+                        className="input-field"
+                    />
+                </div>
             )}
 
             {type === "episodes" && (
-            <>
-                <input
-                type="text"
-                placeholder="Titre de l'épisode"
-                value={episodeTitle}
-                onChange={(e) => setEpisodeTitle(e.target.value)}
-                className="input-field"
-                />
-                <input
-                type="number"
-                placeholder="Durée (sec)"
-                value={duration}
-                onChange={(e) => setDuration(Number(e.target.value))}
-                className="input-field"
-                />
-                <input
-                type="number"
-                placeholder="Vues"
-                value={views}
-                onChange={(e) => setViews(Number(e.target.value))}
-                className="input-field"
-                />
-                <input
-                type="number"
-                placeholder="ID de la série"
-                value={season}
-                onChange={(e) => setSeason(Number(e.target.value))}
-                className="input-field"
-                />
-            </>
+                <>
+                    <div className="form-group">
+                        <label>Titre de l'épisode</label>
+                        <input
+                            type="text"
+                            value={episodeTitle}
+                            onChange={(e) => setEpisodeTitle(e.target.value)}
+                            className="input-field"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Durée (sec)</label>
+                        <input
+                            type="number"
+                            value={duration}
+                            onChange={(e) => setDuration(Number(e.target.value))}
+                            className="input-field"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Vues</label>
+                        <input
+                            type="number"
+                            value={views}
+                            onChange={(e) => setViews(Number(e.target.value))}
+                            className="input-field"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>ID de la série</label>
+                        <input
+                            type="number"
+                            value={season}
+                            onChange={(e) => setSeason(Number(e.target.value))}
+                            className="input-field"
+                        />
+                    </div>
+                </>
             )}
 
             <button type="submit" className="submit-button">
-            Ajouter
+                Ajouter
             </button>
         </form>
 
         <style>{`
             .add-content-page {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f3f4f6;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                background: linear-gradient(135deg, #0f172a, #1e293b);
+                padding: 2rem;
+                color: white;
             }
 
             .add-content-form {
-            background: white;
-            padding: 2rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 50%;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            align-items: center;
+                width: 420px;
+                backdrop-filter: blur(18px);
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                border-radius: 1rem;
+                padding: 2rem;
+                display: flex;
+                flex-direction: column;
+                gap: 1.2rem;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.3);
             }
 
-            .add-content-form h2 {
-            margin-bottom: 1rem;
+            .title {
+                font-size: 1.8rem;
+                text-align: center;
+                margin-bottom: 0.5rem;
+                font-weight: 600;
+            }
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 0.3rem;
+                width: 100%;
+            }
+
+            .form-group label {
+                font-size: 0.9rem;
+                opacity: 0.8;
             }
 
             .input-field {
-            width: 50%;
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 0.25rem;
-            margin-bottom: 0.5rem;
+                padding: 0.7rem 0.8rem;
+                background: rgba(255, 255, 255, 0.15);
+                border: none;
+                border-radius: 0.4rem;
+                color: white;
+                font-size: 1rem;
+                outline: none;
+                transition: 0.2s ease;
+            }
+
+            .input-field::placeholder {
+                color: rgba(255,255,255,0.4);
+            }
+
+            .input-field:focus {
+                background: rgba(255,255,255,0.25);
             }
 
             .submit-button {
-            padding: 0.5rem 1rem;
-            background-color: #3b82f6;
-            color: white;
-            border: none;
-            border-radius: 0.25rem;
-            cursor: pointer;
+                margin-top: 1rem;
+                padding: 0.8rem;
+                background: #3b82f6;
+                border: none;
+                border-radius: 0.5rem;
+                font-size: 1.1rem;
+                color: white;
+                cursor: pointer;
+                transition: 0.2s ease;
             }
 
             .submit-button:hover {
-            background-color: #2563eb;
+                background: #2563eb;
             }
+
         `}</style>
-        </div>
-    );
-}
+    </div>
+)};
