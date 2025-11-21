@@ -3,22 +3,23 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { View, StyleSheet, Animated } from 'react-native';
 import 'react-native-reanimated';
+import { Audio } from 'expo-av';
+import { Image as ExpoImage } from 'expo-image';
 
 import { useColorScheme } from '@/components/useColorScheme';
+import { AuthProvider } from './authContext';
 
 export {
-  // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '(tabs)',
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -27,22 +28,69 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
+  const [showSplash, setShowSplash] = useState(true);
+  const opacity = new Animated.Value(0);
+
+  // Play startup sound + animation
+  useEffect(() => {
+    const playStartup = async () => {
+      // Load and play the YTS sound (add your own mp3!)
+      const { sound } = await Audio.Sound.createAsync(
+        require('../assets/sounds/toudoum.wav')
+      );
+      await sound.playAsync();
+
+      // Fade in effect for splash screen
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }).start();
+
+      // Keep splash 2 sec
+      await new Promise((res) => setTimeout(res, 2000));
+
+      setShowSplash(false);
+      SplashScreen.hideAsync();
+    };
+
+    playStartup();
+  }, []);
+
+  // Handle font errors
   useEffect(() => {
     if (error) throw error;
   }, [error]);
 
+  // When fonts are loaded, we keep splash for animation
   useEffect(() => {
     if (loaded) {
-      SplashScreen.hideAsync();
+      // nothing, splash hides itself later
     }
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
 
-  return <RootLayoutNav />;
+
+  // Display the splash screen
+  if (!loaded || showSplash) {
+  return (
+    <View style={styles.splashContainer}>
+      <Animated.View>
+        <ExpoImage
+          source={require('../assets/load-loading.gif')}
+          style={styles.logo}
+        />
+      </Animated.View>
+    </View>
+  );
+}
+
+
+  return (
+    <AuthProvider>
+  <RootLayoutNav />
+  </AuthProvider>
+);
 }
 
 function RootLayoutNav() {
@@ -52,8 +100,22 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="modal2" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="modalAccount" options={{ presentation: 'modal' }} />
       </Stack>
     </ThemeProvider>
   );
 }
+
+const styles = StyleSheet.create({
+splashContainer: {
+  flex: 1,
+  backgroundColor: 'black',
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+logo: {
+  width: 220,
+  height: 220,
+},
+});
